@@ -9,6 +9,7 @@ import axios from "axios";
 import { Squash as Hamburger } from "hamburger-react";
 import { ImageResponse, QuotesResponse, TimeResponse } from "../types";
 import { Detail, Quote, Time } from "../components";
+import Head from "next/head";
 
 const Home: NextPage = ({
   data,
@@ -37,6 +38,13 @@ const Home: NextPage = ({
 
   return (
     <>
+      <Head>
+        <title>Starting Page</title>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+        <meta name="description" content="Starting Page For Browser" />
+        <meta name="keywords" content="NextJS, Tailwind CSS, React" />
+        <meta name="author" content="handleryouth" />
+      </Head>
       <div className="absolute w-full h-screen">
         <Image
           src={image.hits[randomNumber].largeImageURL}
