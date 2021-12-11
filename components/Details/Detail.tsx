@@ -15,20 +15,15 @@ const Detail = ({
   setOpen,
   open,
 }: DetailProps) => {
-  const [renderCount, setRenderCount] = useState<number>(0);
-
   return (
     <div
       className={`
-      ${!open && "-translate-x-full duration-150"} 
-      absolute z-20 h-screen w-72 bg-black sm:bg-opacity-50 ${
-        renderCount > 0 && "duration-150"
-      }`}
+      ${open && "translate-x-full"} 
+      absolute z-20 h-screen w-72 bg-black sm:bg-opacity-50 right-full duration-150`}
     >
       <p
         className="text-white w-full text-right px-8 text-4xl cursor-pointer h-1/4"
         onClick={() => {
-          setRenderCount((prevState) => prevState + 1);
           setOpen((prevState) => !prevState);
         }}
       >
