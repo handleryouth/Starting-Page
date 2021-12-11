@@ -62,10 +62,10 @@ const Home: NextPage = ({
     <>
       <Head>
         <title>Starting Page</title>
-        <html lang="en" />
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
         <meta name="description" content="Starting Page For Browser" />
         <meta name="keywords" content="NextJS, Tailwind CSS, React" />
+        <meta httpEquiv="content-language" content="en-us" />
         <meta name="author" content="handleryouth" />
       </Head>
 
