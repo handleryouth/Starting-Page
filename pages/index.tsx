@@ -79,7 +79,6 @@ const Home: NextPage = ({
 
       <div className="absolute w-full h-screen">
         <Image
-          role="img"
           src={image.hits[randomNumber].largeImageURL}
           alt="Background Image"
           layout="fill"
@@ -93,7 +92,6 @@ const Home: NextPage = ({
 
         <input
           {...register("search")}
-          role="textbox"
           placeholder="Ask Google !"
           className="!phone:w-96 text-white mt-4 bg-transparent border-b-2 border-white font-body text-center text-md phone:text-xl px-2 w-4/6 focus:outline-none pb-2"
           onKeyDown={(e) => {
