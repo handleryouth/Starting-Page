@@ -62,6 +62,7 @@ const Home: NextPage = ({
     <>
       <Head>
         <title>Starting Page</title>
+        <html lang="en" />
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
         <meta name="description" content="Starting Page For Browser" />
         <meta name="keywords" content="NextJS, Tailwind CSS, React" />
@@ -78,6 +79,7 @@ const Home: NextPage = ({
 
       <div className="absolute w-full h-screen">
         <Image
+          role="img"
           src={image.hits[randomNumber].largeImageURL}
           alt="Background Image"
           layout="fill"
@@ -91,14 +93,13 @@ const Home: NextPage = ({
 
         <input
           {...register("search")}
+          role="textbox"
           placeholder="Ask Google !"
           className="!phone:w-96 text-white mt-4 bg-transparent border-b-2 border-white font-body text-center text-md phone:text-xl px-2 w-4/6 focus:outline-none pb-2"
           onKeyDown={(e) => {
             e.key === "Enter" && handleSubmitSearch(watch("search"));
           }}
         />
-
-        <div className="mt-4 text-white"></div>
       </div>
     </>
   );
