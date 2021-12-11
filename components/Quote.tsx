@@ -1,6 +1,6 @@
 import { QuotesResponse } from "../types";
 
-export const Quote = ({ content, author }: QuotesResponse) => {
+const Quote = ({ content, author }: QuotesResponse) => {
   return (
     <div className="text-white text-center mt-4 flex flex-col justify-center items-center">
       <p className="text-lg phone:text-2xl w-5/6 phone:w-3/4">{`"${content}"`}</p>
@@ -8,3 +8,5 @@ export const Quote = ({ content, author }: QuotesResponse) => {
     </div>
   );
 };
+
+export default Quote;

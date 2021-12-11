@@ -1,5 +1,5 @@
 import { SetStateAction } from "react";
-import { DetailChildren } from "./DetailChildren";
+import DetailChildren from "./DetailChildren";
 import { TimeResponse } from "../../types";
 
 interface DetailProps extends TimeResponse {
@@ -7,7 +7,7 @@ interface DetailProps extends TimeResponse {
   setOpen: React.Dispatch<SetStateAction<boolean>>;
 }
 
-export const Detail = ({
+const Detail = ({
   timezone,
   day_of_year,
   day_of_week,
@@ -36,3 +36,5 @@ export const Detail = ({
     </div>
   );
 };
+
+export default Detail;

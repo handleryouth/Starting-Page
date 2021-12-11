@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { format } from "date-fns";
 import { TimeResponse } from "../types";
 
-export const Time = ({ datetime, abbreviation }: TimeResponse) => {
+const Time = ({ datetime, abbreviation }: TimeResponse) => {
   const parsedTime = useMemo(() => {
     return parseInt(format(new Date(datetime), "HH"));
   }, [datetime]);
@@ -28,3 +28,5 @@ export const Time = ({ datetime, abbreviation }: TimeResponse) => {
     </div>
   );
 };
+
+export default Time;
