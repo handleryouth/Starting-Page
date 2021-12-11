@@ -1,15 +1,23 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
+import Head from "next/head";
+import { useForm } from "react-hook-form";
 import type {
   GetServerSideProps,
   InferGetServerSidePropsType,
   NextPage,
 } from "next";
+import { useRouter } from "next/router";
 import axios from "axios";
+import { Input } from "@chakra-ui/react";
 import { Squash as Hamburger } from "hamburger-react";
-import { ImageResponse, QuotesResponse, TimeResponse } from "../types";
+import {
+  ImageResponse,
+  QuotesResponse,
+  SearchTemplate,
+  TimeResponse,
+} from "../types";
 import { Detail, Quote, Time } from "../components";
-import Head from "next/head";
 
 const Home: NextPage = ({
   data,
@@ -17,8 +25,10 @@ const Home: NextPage = ({
   const [quote, time, image]: [QuotesResponse, TimeResponse, ImageResponse] =
     data;
 
-  const [timeData, setTimeData] = useState<TimeResponse>(time);
+  const [timeData, setTimeData] = useState<TimeResponse | undefined>(time);
   const [open, setOpen] = useState<boolean>(false);
+  const { register, watch } = useForm<SearchTemplate>();
+  const router = useRouter();
 
   const randomNumber = useMemo(() => {
     return Math.floor(Math.random() * 10);
@@ -30,10 +40,23 @@ const Home: NextPage = ({
     });
   }, []);
 
+  const handleSubmitSearch = useCallback(
+    (value: string) => {
+      router.push(
+        "https://www.google.com/search?q=" + value.replaceAll(" ", "+")
+      );
+    },
+    [router]
+  );
+
   useEffect(() => {
     setInterval(() => {
       handleRefreshClock();
     }, 60000);
+
+    return () => {
+      setTimeData(undefined);
+    };
   }, [handleRefreshClock]);
 
   return (
@@ -45,6 +68,15 @@ const Home: NextPage = ({
         <meta name="keywords" content="NextJS, Tailwind CSS, React" />
         <meta name="author" content="handleryouth" />
       </Head>
+
+      <div
+        className={`absolute z-20 text-white border-2 rounded mt-2 ml-2 ${
+          open && "hidden"
+        }`}
+      >
+        <Hamburger toggled={open} toggle={setOpen} size={18} />
+      </div>
+
       <div className="absolute w-full h-screen">
         <Image
           src={image.hits[randomNumber].largeImageURL}
@@ -55,11 +87,21 @@ const Home: NextPage = ({
       </div>
       <Detail open={open} setOpen={setOpen} {...time} />
       <div className="absolute z-10 flex justify-center items-center flex-col h-screen w-full bg-black bg-opacity-40">
-        <Time {...timeData} />
+        <Time {...timeData!} />
         <Quote {...quote} />
-        <div className="mt-4 text-white">
-          <Hamburger toggled={open} toggle={setOpen} />
-        </div>
+
+        <Input
+          {...register("search")}
+          variant="flushed"
+          placeholder="Ask Google !"
+          size="lg"
+          className="!phone:w-96 text-white mt-4 !border-b-2 border-white font-body text-center !text-md !phone:text-xl !px-2 !w-4/6"
+          onKeyDown={(e) => {
+            e.key === "Enter" && handleSubmitSearch(watch("search"));
+          }}
+        />
+
+        <div className="mt-4 text-white"></div>
       </div>
     </>
   );

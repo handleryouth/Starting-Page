@@ -96,3 +96,7 @@ export interface RequestImageBody {
     | "black"
     | "brown";
 }
+
+export interface SearchTemplate {
+  search: string;
+}

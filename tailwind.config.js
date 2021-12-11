@@ -7,6 +7,9 @@ module.exports = {
       screens: {
         phone: "420px",
       },
+      fontFamily: {
+        body: ["Open Sans"],
+      },
     },
   },
   variants: {
