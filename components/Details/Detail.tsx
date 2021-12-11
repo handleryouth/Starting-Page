@@ -21,7 +21,7 @@ const Detail = ({
     <div
       className={`
       ${open && "translate-x-full "} 
-      absolute z-20 h-screen w-72 bg-black sm:bg-opacity-50 right-full duration-150 ${
+      absolute z-20 h-screen min-h-160 w-72 bg-black sm:bg-opacity-50 right-full duration-150 ${
         renderCount > 0 && "duration-150"
       }`}
     >
