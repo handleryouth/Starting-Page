@@ -77,7 +77,7 @@ const Home: NextPage = ({
         <Hamburger toggled={open} toggle={setOpen} size={18} />
       </div>
 
-      <div className="absolute w-full h-screen">
+      <div className="absolute w-full h-screen min-h-160">
         <Image
           src={image.hits[randomNumber].largeImageURL}
           alt="Background Image"
@@ -86,7 +86,7 @@ const Home: NextPage = ({
         />
       </div>
       <Detail open={open} setOpen={setOpen} {...time} />
-      <div className="absolute z-10 flex justify-center items-center flex-col h-screen w-full bg-black bg-opacity-40">
+      <div className="absolute z-10 flex justify-center items-center flex-col h-screen w-full bg-black bg-opacity-40 min-h-160">
         <Time {...timeData!} />
         <Quote {...quote} />
 
