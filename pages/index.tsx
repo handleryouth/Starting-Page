@@ -49,11 +49,12 @@ const Home: NextPage = ({
   );
 
   useEffect(() => {
-    setInterval(() => {
+    const refreshClock = setInterval(() => {
       handleRefreshClock();
     }, 60000);
 
     return () => {
+      clearInterval(refreshClock);
       setTimeData(undefined);
     };
   }, [handleRefreshClock]);
