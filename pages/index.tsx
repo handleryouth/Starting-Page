@@ -1,42 +1,29 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
+import type { NextPage } from "next";
+import useSWR from "swr";
+import { useForm } from "react-hook-form";
+import { Squash as Hamburger } from "hamburger-react";
+import { useRouter } from "next/router";
 import Image from "next/image";
 import Head from "next/head";
-import type {
-  GetServerSideProps,
-  InferGetServerSidePropsType,
-  NextPage,
-} from "next";
-import { useRouter } from "next/router";
-import { useForm } from "react-hook-form";
-import axios from "axios";
-import { Squash as Hamburger } from "hamburger-react";
-import {
-  ImageResponse,
-  QuotesResponse,
-  SearchTemplate,
-  TimeResponse,
-} from "../types";
-import { Detail, Quote, Time } from "../components";
+import { ImageResponse, SearchTemplate } from "types";
+import { Detail, Quote, Time } from "components";
 
-const Home: NextPage = ({
-  data,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  const [quote, time, image]: [QuotesResponse, TimeResponse, ImageResponse] =
-    data;
+const Home: NextPage = () => {
+  const time = useSWR("http://worldtimeapi.org/api/ip");
 
-  const [timeData, setTimeData] = useState<TimeResponse | undefined>(time);
+  const quote = useSWR("https://api.quotable.io/random");
+
+  const image = useSWR(
+    `https://pixabay.com/api/?key=22826797-0e3c3eea9b85a7ce6aee2bbb7&category=nature&min_width=1920&min_height=1080&editors_choice=true&per_page=10&color=black`
+  );
+
   const [open, setOpen] = useState<boolean>(false);
   const { register, watch } = useForm<SearchTemplate>();
   const router = useRouter();
 
   const randomNumber = useMemo(() => {
     return Math.floor(Math.random() * 10);
-  }, []);
-
-  const handleRefreshClock = useCallback(() => {
-    axios.get("http://worldtimeapi.org/api/ip").then((res) => {
-      setTimeData(res.data);
-    });
   }, []);
 
   const handleSubmitSearch = useCallback(
@@ -47,17 +34,6 @@ const Home: NextPage = ({
     },
     [router]
   );
-
-  useEffect(() => {
-    const refreshClock = setInterval(() => {
-      handleRefreshClock();
-    }, 60000);
-
-    return () => {
-      clearInterval(refreshClock);
-      setTimeData(undefined);
-    };
-  }, [handleRefreshClock]);
 
   return (
     <>
@@ -79,17 +55,19 @@ const Home: NextPage = ({
       </div>
 
       <div className="absolute w-full h-screen min-h-160">
-        <Image
-          src={image.hits[randomNumber].largeImageURL}
-          alt="Background Image"
-          layout="fill"
-          objectFit="cover"
-        />
+        {image.data && (
+          <Image
+            src={(image.data as ImageResponse).hits[randomNumber].largeImageURL}
+            alt="Background Image"
+            layout="fill"
+            objectFit="cover"
+          />
+        )}
       </div>
-      <Detail open={open} setOpen={setOpen} {...time} />
+      <Detail open={open} setOpen={setOpen} {...time.data} />
       <div className="absolute z-10 flex justify-center items-center flex-col h-screen w-full bg-black bg-opacity-40 min-h-160">
-        <Time {...timeData!} />
-        <Quote {...quote} />
+        <Time {...time.data} />
+        <Quote {...quote.data} />
 
         <input
           {...register("search")}
@@ -102,23 +80,6 @@ const Home: NextPage = ({
       </div>
     </>
   );
-};
-
-export const getServerSideProps: GetServerSideProps = async () => {
-  let endpoints = [
-    "https://api.quotable.io/random",
-    "http://worldtimeapi.org/api/ip",
-    "https://pixabay.com/api/?key=22826797-0e3c3eea9b85a7ce6aee2bbb7&category=nature&min_width=1920&min_height=1080&editors_choice=true&per_page=10&color=black",
-  ];
-  const responseData = await axios
-    .all(endpoints.map((endpoint) => axios.get(endpoint)))
-    .then((res) => {
-      return res.map((r) => r.data);
-    });
-
-  return {
-    props: { data: responseData },
-  };
 };
 
 export default Home;

@@ -1,11 +1,6 @@
-import { SetStateAction, useState } from "react";
+import { useState } from "react";
 import DetailChildren from "./DetailChildren";
-import { TimeResponse } from "../../types";
-
-interface DetailProps extends TimeResponse {
-  open: boolean;
-  setOpen: React.Dispatch<SetStateAction<boolean>>;
-}
+import { DetailProps } from "types";
 
 const Detail = ({
   timezone,

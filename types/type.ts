@@ -1,3 +1,5 @@
+import { SetStateAction } from "react";
+
 export interface QuotesResponse {
   _id: string;
   author: string;
@@ -99,4 +101,14 @@ export interface RequestImageBody {
 
 export interface SearchTemplate {
   search: string;
+}
+
+export interface DetailChildrenProps {
+  title: string;
+  value: string | number;
+}
+
+export interface DetailProps extends TimeResponse {
+  open: boolean;
+  setOpen: React.Dispatch<SetStateAction<boolean>>;
 }
