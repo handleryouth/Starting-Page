@@ -10,7 +10,7 @@ import { ImageResponse, SearchTemplate } from "types";
 import { Detail, Quote, Time } from "components";
 
 const Home: NextPage = () => {
-  const time = useSWR("http://worldtimeapi.org/api/ip");
+  const time = useSWR("https://worldtimeapi.org/api/ip");
 
   const quote = useSWR("https://api.quotable.io/random");
 
