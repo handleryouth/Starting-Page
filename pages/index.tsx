@@ -30,6 +30,9 @@ const Home: NextPage = () => {
     [router]
   );
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const randomNumber = useMemo(() => Math.floor(Math.random() * 10), [image]);
+
   useEffect(() => {
     const interval = setInterval(() => setDate(new Date()), 60000);
     return () => clearInterval(interval);
@@ -58,7 +61,7 @@ const Home: NextPage = () => {
         {image.data && (
           <Image
             src={
-              (image.data as ImageResponse).hits[Math.floor(Math.random() * 10)]
+              (image.data as ImageResponse).hits[Math.floor(randomNumber)]
                 .largeImageURL
             }
             alt="Background Image"
