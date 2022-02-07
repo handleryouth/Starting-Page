@@ -1,16 +1,17 @@
-import { useState } from "react";
-import DetailChildren from "./DetailChildren";
+import { useCallback, useState } from "react";
 import { DetailProps } from "types";
+import DetailChildren from "./DetailChildren";
 
-const Detail = ({
-  timezone,
-  day_of_year,
-  day_of_week,
-  week_number,
-  setOpen,
-  open,
-}: DetailProps) => {
+const Detail = ({ setOpen, open, date }: DetailProps) => {
   const [renderCount, setRenderCount] = useState<number>(0);
+
+  const getWeekNumber = useCallback(() => {
+    let oneJan = new Date(date.getFullYear(), 0, 1);
+    let numberOfDays = Math.floor(
+      (Number(date) - Number(oneJan)) / (24 * 60 * 60 * 1000)
+    );
+    return Math.ceil((date.getDay() + 1 + numberOfDays) / 7);
+  }, [date]);
 
   return (
     <div
@@ -21,7 +22,7 @@ const Detail = ({
       }`}
     >
       <p
-        className="text-white w-full text-right px-8 text-4xl cursor-pointer h-1/4"
+        className="text-white w-full text-right px-8 text-3xl cursor-pointer h-1/4"
         onClick={() => {
           setRenderCount((prevState) => prevState + 1);
           setOpen((prevState) => !prevState);
@@ -30,10 +31,19 @@ const Detail = ({
         x
       </p>
       <div className=" text-white flex flex-col h-3/4 px-4">
-        <DetailChildren title="CURRENT TIMEZONE" value={timezone} />
-        <DetailChildren title="DAY OF THE YEAR" value={day_of_year} />
-        <DetailChildren title="DAY OF THE WEEK" value={day_of_week + 1} />
-        <DetailChildren title="WEEK NUMBER" value={week_number} />
+        <DetailChildren
+          title="CURRENT TIMEZONE"
+          value={Intl.DateTimeFormat().resolvedOptions().timeZone}
+        />
+        <DetailChildren
+          title="DAY OF THE YEAR"
+          value={new Date().getFullYear()}
+        />
+        <DetailChildren
+          title="DAY OF THE WEEK"
+          value={new Date().getDay() + 1}
+        />
+        <DetailChildren title="WEEK NUMBER" value={getWeekNumber()} />
       </div>
     </div>
   );

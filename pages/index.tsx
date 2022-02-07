@@ -1,30 +1,25 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import type { NextPage } from "next";
 import useSWR from "swr";
 import { useForm } from "react-hook-form";
 import { Squash as Hamburger } from "hamburger-react";
+import { ImageResponse, SearchTemplate } from "types";
+import { Detail, Quote, Time } from "components";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import Head from "next/head";
-import { ImageResponse, SearchTemplate } from "types";
-import { Detail, Quote, Time } from "components";
 
 const Home: NextPage = () => {
-  const time = useSWR("https://worldtimeapi.org/api/ip");
-
   const quote = useSWR("https://api.quotable.io/random");
-
   const image = useSWR(
     `https://pixabay.com/api/?key=22826797-0e3c3eea9b85a7ce6aee2bbb7&category=nature&min_width=1920&min_height=1080&editors_choice=true&per_page=10&color=black`
   );
 
+  const [date, setDate] = useState<Date>(new Date());
+
   const [open, setOpen] = useState<boolean>(false);
   const { register, watch } = useForm<SearchTemplate>();
   const router = useRouter();
-
-  const randomNumber = useMemo(() => {
-    return Math.floor(Math.random() * 10);
-  }, []);
 
   const handleSubmitSearch = useCallback(
     (value: string) => {
@@ -34,6 +29,11 @@ const Home: NextPage = () => {
     },
     [router]
   );
+
+  useEffect(() => {
+    const interval = setInterval(() => setDate(new Date()), 60000);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <>
@@ -57,16 +57,19 @@ const Home: NextPage = () => {
       <div className="absolute w-full h-screen min-h-160">
         {image.data && (
           <Image
-            src={(image.data as ImageResponse).hits[randomNumber].largeImageURL}
+            src={
+              (image.data as ImageResponse).hits[Math.floor(Math.random() * 10)]
+                .largeImageURL
+            }
             alt="Background Image"
             layout="fill"
             objectFit="cover"
           />
         )}
       </div>
-      <Detail open={open} setOpen={setOpen} {...time.data} />
+      <Detail open={open} setOpen={setOpen} date={date} />
       <div className="absolute z-10 flex justify-center items-center flex-col h-screen w-full bg-black bg-opacity-40 min-h-160">
-        <Time {...time.data} />
+        <Time date={date} />
         <Quote {...quote.data} />
 
         <input
