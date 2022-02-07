@@ -21,7 +21,7 @@ const Time = ({ date }: TimeProps) => {
 
   return (
     <div className="text-white">
-      <h1 className="text-6xl phone:text-9xl my-0 font-bold">
+      <h1 className="text-6xl phone:text-9xl my-0 font-bold text-center">
         {format(date, "HH:mm")}
       </h1>
 
